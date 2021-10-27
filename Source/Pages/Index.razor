@@ -1,0 +1,33 @@
+﻿@page "/"
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+
+<div id="photo-upload">
+    <div class="photo-upload-description">Drag files here!</div>
+</div>
+
+<canvas id="photo-canvas" style="display:none"></canvas>
+
+
+@code {
+    private IJSObjectReference module;
+
+	 protected override async Task OnAfterRenderAsync(bool firstRender)
+     {
+        if (firstRender)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./spectacles.js");
+
+            await module.InvokeVoidAsync("loadDropZone");
+        }
+    }
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.DisposeAsync();
+        }
+    }
+}

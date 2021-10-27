@@ -1,0 +1,10 @@
+﻿#photo-upload {
+    width:95%;
+    max-width:95%;
+    margin:0 auto;
+    height:80vh;
+    text-align:center;
+    font-weight:bold;
+    font-size:1.2em;
+    cursor:pointer;
+}
