@@ -28,4 +28,14 @@ jobs:
       - name: Build Project
         run: dotnet build Source/Spectacle.sln
         
-      
+      - name: Zip Build Files
+        uses: papeloto/action-zip@v1
+        with:
+          files: Source\bin\Debug\net5.0\
+          dest: build_release.zip
+        
+      - name: Create Build Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build_release.zip
+          path: build_release.zip
