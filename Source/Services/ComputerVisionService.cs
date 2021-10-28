@@ -15,6 +15,7 @@ namespace Spectacle.Services
         private ComputerVisionClient _computerVisionClient;
         private AzureDataService _azureDataService;
         private string _modelVersion;
+        private bool _deleteImageAfterProcessing;
 
         public ComputerVisionService(IConfiguration config, AzureDataService azureDataService)
         {
@@ -23,11 +24,12 @@ namespace Spectacle.Services
 
             _modelVersion = config.GetSection("ComputerVision").GetValue<string>("ModelVersion") ?? "latest";
             _azureDataService = azureDataService;
+            _deleteImageAfterProcessing = config.GetValue<bool>("DeleteFromStorageAfterProcessing");
         }
 
         public async Task<IEnumerable<ReadResult>> FindTextOnImageAsync(string imageName, Stream imageStream)
         {
-            Uri blobSasUri = await _azureDataService.UploadImageToBlobStorage(imageName, imageStream);
+            Uri blobSasUri = await _azureDataService.UploadImageToBlobStorageAsync(imageName, imageStream);
 
             var streamHeaders = await _computerVisionClient.ReadAsync(blobSasUri.AbsoluteUri, modelVersion: _modelVersion);
             string operationLocation = streamHeaders.OperationLocation;
@@ -45,6 +47,11 @@ namespace Spectacle.Services
             }
             while ((results.Status == OperationStatusCodes.Running ||
                     results.Status == OperationStatusCodes.NotStarted));
+
+            if (_deleteImageAfterProcessing)
+            {
+                await _azureDataService.DeleteImageWithNameAsync(blobSasUri.Segments.Last());
+            }
 
             return results.AnalyzeResult.ReadResults;
         }

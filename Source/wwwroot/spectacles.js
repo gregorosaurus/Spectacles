@@ -11,7 +11,7 @@ export function loadDropZone() {
     });
     myDropZone.on("addedfile", function (file) {
         console.log("A file has been added");
-
+        document.getElementById('loading').style.display = 'block';
         document.getElementById('photo-upload').style.display = 'none';
 
 
@@ -19,6 +19,7 @@ export function loadDropZone() {
         document.getElementById('photo-canvas').style.display = 'block';
     });
     myDropZone.on('complete', function (file) {
+        document.getElementById('loading').style.display = 'none';
         //draw the rest of the things. 
         var canvas = document.getElementById("photo-canvas");
         canvas.onmouseover = function onMouseover(e) {

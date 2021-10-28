@@ -25,9 +25,9 @@ namespace Spectacle.Services
         /// <param name="name"></param>
         /// <param name="imageStream"></param>
         /// <returns></returns>
-        public async Task<Uri> UploadImageToBlobStorage(string name, Stream imageStream)
+        public async Task<Uri> UploadImageToBlobStorageAsync(string name, Stream imageStream)
         {
-            BlobContainerClient containerClient = await _blobServiceClient.CreateBlobContainerAsync(SpectaclesUploadContainerName);
+            BlobContainerClient containerClient =  _blobServiceClient.GetBlobContainerClient(SpectaclesUploadContainerName);
             await containerClient.CreateIfNotExistsAsync();
 
             string uploadName = string.IsNullOrEmpty(name) ? Guid.NewGuid().ToString() : name;
@@ -41,6 +41,18 @@ namespace Spectacle.Services
             });
 
             return blobClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTime.UtcNow.AddMinutes(15));
+        }
+
+        internal async Task DeleteImageWithNameAsync(string fileName)
+        {
+            BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(SpectaclesUploadContainerName);
+            if(!(await containerClient.ExistsAsync()))
+            {
+                return;
+            }
+
+            BlobClient blobClient = containerClient.GetBlobClient(fileName);
+            await blobClient.DeleteIfExistsAsync();
         }
     }
 }
