@@ -1,0 +1,31 @@
+# This workflow creates a release on a push to the main branch. 
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+    
+  workflow_dispatch:
+
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    name: Create Build Release Artifact
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.X
+          
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Build Project
+        run: dotnet build
+        
+      
