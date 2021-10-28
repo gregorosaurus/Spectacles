@@ -1,5 +1,6 @@
 ﻿export const name = 'spectacle';
 
+
 export function loadDropZone() {
 
     let myDropZone = new Dropzone("div#photo-upload", {
@@ -20,6 +21,9 @@ export function loadDropZone() {
     myDropZone.on('complete', function (file) {
         //draw the rest of the things. 
         var canvas = document.getElementById("photo-canvas");
+        canvas.onmouseover = function onMouseover(e) {
+            //check which 
+        };
         var ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight - 60.0;
@@ -42,32 +46,11 @@ export function loadDropZone() {
             readResults.forEach(page => {
                 page.lines.forEach(line => {
                     var boundingBox = line.boundingBox;
-                    //the bounding box is that of an unscaled image.  So we need to move the points
-                    //respective to the scale. 
-                    ctx.beginPath();
-                    ctx.lineWidth = "2";
-                    ctx.strokeStyle = "red";
+                    drawBoundingBox(ctx, ratio, centerShift_x, centerShift_y, boundingBox, 'red');
 
-                    var firstScaledX = 0;
-                    var firstScaledY = 0;
-                    for (var i = 0; i < boundingBox.length; i += 2) {
-                        var x = boundingBox[i];
-                        var y = boundingBox[i + 1];
-
-                        var scaledX = x * ratio + centerShift_x;
-                        var scaledY = y * ratio + centerShift_y;
-
-                        if (i < 2) {
-                            ctx.moveTo(scaledX, scaledY);
-                            firstScaledX = scaledX;
-                            firstScaledY = scaledY;
-                        } else {
-                            ctx.lineTo(scaledX, scaledY);
-                        }
-                    }
-                    ctx.lineTo(firstScaledX, firstScaledY);
-
-                    ctx.stroke();
+                    //line.words.forEach(word => {
+                    //    drawBoundingBox(ctx, ratio, centerShift_x, centerShift_y, word.boundingBox, 'blue');
+                    //});
                 });
             });
 
@@ -76,5 +59,34 @@ export function loadDropZone() {
 
         
     });
+}
+
+function drawBoundingBox(ctx,scaleRatio,scaledShiftX, scaledShiftY, boundingBox, strokeStyle) {
+    //the bounding box is that of an unscaled image.  So we need to move the points
+    //respective to the scale. 
+    ctx.beginPath();
+    ctx.lineWidth = "2";
+    ctx.strokeStyle = strokeStyle;
+
+    var firstScaledX = 0;
+    var firstScaledY = 0;
+    for (var i = 0; i < boundingBox.length; i += 2) {
+        var x = boundingBox[i];
+        var y = boundingBox[i + 1];
+
+        var scaledX = x * scaleRatio + scaledShiftX;
+        var scaledY = y * scaleRatio + scaledShiftY;
+
+        if (i < 2) {
+            ctx.moveTo(scaledX, scaledY);
+            firstScaledX = scaledX;
+            firstScaledY = scaledY;
+        } else {
+            ctx.lineTo(scaledX, scaledY);
+        }
+    }
+    ctx.lineTo(firstScaledX, firstScaledY);
+
+    ctx.stroke();
 }
 

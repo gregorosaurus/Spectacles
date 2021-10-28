@@ -25,7 +25,7 @@ namespace Spectacle.Controllers
         {
             using (Stream readStream = file.OpenReadStream())
             {
-                return Ok(await _computerVisionService.FindTextOnImageAsync(readStream));
+                return Ok(await _computerVisionService.FindTextOnImageAsync(file.Name, readStream));
             }
             
         }

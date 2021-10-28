@@ -28,6 +28,7 @@ namespace Spectacle
             services.AddServerSideBlazor();
             services.AddSingleton(Configuration);
             services.AddScoped<Services.ComputerVisionService>();
+            services.AddScoped<Services.AzureDataService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

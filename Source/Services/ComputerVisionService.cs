@@ -12,16 +12,24 @@ namespace Spectacle.Services
 {
     public class ComputerVisionService
     {
-        private ComputerVisionClient _client;
-        public ComputerVisionService(IConfiguration config)
+        private ComputerVisionClient _computerVisionClient;
+        private AzureDataService _azureDataService;
+        private string _modelVersion;
+
+        public ComputerVisionService(IConfiguration config, AzureDataService azureDataService)
         {
-            _client = new ComputerVisionClient(new ApiKeyServiceClientCredentials(config.GetSection("ComputerVision").GetValue<string>("Key")))
+            _computerVisionClient = new ComputerVisionClient(new ApiKeyServiceClientCredentials(config.GetSection("ComputerVision").GetValue<string>("Key")))
             { Endpoint = config.GetSection("ComputerVision").GetValue<string>("Endpoint") };
+
+            _modelVersion = config.GetSection("ComputerVision").GetValue<string>("ModelVersion") ?? "latest";
+            _azureDataService = azureDataService;
         }
 
-        public async Task<IEnumerable<ReadResult>> FindTextOnImageAsync(Stream imageStream)
+        public async Task<IEnumerable<ReadResult>> FindTextOnImageAsync(string imageName, Stream imageStream)
         {
-            var streamHeaders = await _client.ReadInStreamAsync(imageStream);
+            Uri blobSasUri = await _azureDataService.UploadImageToBlobStorage(imageName, imageStream);
+
+            var streamHeaders = await _computerVisionClient.ReadAsync(blobSasUri.AbsoluteUri, modelVersion: _modelVersion);
             string operationLocation = streamHeaders.OperationLocation;
 
             Thread.Sleep(2000);
@@ -33,7 +41,7 @@ namespace Spectacle.Services
             ReadOperationResult results;
             do
             {
-                results = await _client.GetReadResultAsync(Guid.Parse(operationId));
+                results = await _computerVisionClient.GetReadResultAsync(Guid.Parse(operationId));
             }
             while ((results.Status == OperationStatusCodes.Running ||
                     results.Status == OperationStatusCodes.NotStarted));
