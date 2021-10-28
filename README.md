@@ -13,6 +13,9 @@ You can use this information in a variety of applications.  However, when gettin
 This project was created so you can easily get started with Computer Vision on Azure.  With Spectacles, you can upload an image, and it will immediately draw the lines/words it found
 using the Azure Computer Vision service. 
 
+## Demo
+Microsoft employees can access a demo here: [http://spectacles.azurewebsites.net](http://spectacles.azurewebsites.net).  If you aren't a Microsoft employee, move onto the Installation part of this document detailed below!
+
 ## Installation
 The Spectacles solution consists of three resources. 
 1. An App Service Plan (this can run on the free tier no problem)
