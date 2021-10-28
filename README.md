@@ -1,6 +1,6 @@
 # Spectacles
 
-Spectacles is a Microsoft Blazor Server application with the purpose of 
+Spectacles is a [Microsoft Blazor Server](https://dotnet.microsoft.com/apps/aspnet/web-apps/blazor) application with the purpose of 
 visualizing the OCR capability of the [Computer Vision](https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/overview) service 
 on Microsoft Azure.
 
@@ -21,6 +21,9 @@ The Spectacles solution consists of three resources.
 
 The easiest way to install and use Spectacles is to deploy it within your Azure environment by using the supplied ARM template. 
 
+After deployment you can set any additional settings or configurations within the web application that you'd like. 
+
+> **Important** - It is recommended to use authentication for this service and prevent unauthorized access to the application.  Without any authentication, anyone can submit and use the Computer Vision service you've deployed, potentially causing increased Azure costs. 
 
 ## Configuration
 There are 4 configuration options, detailed below. 
@@ -34,7 +37,6 @@ ComputerVision:Key | This is your Computer Vision service key
 ComputerVision:ModelVersion | This is the model version of the model that Spectacles will use when calling the Computer Vision service.  This can be left blank, and the model version will be set to ```latest```.  At the time of writing, the other available option is: ```2021-09-30-preview```.
 ConnectionStrings:StorageAccount | This is the storage account used by Spectacles to temporarily upload blobs to for the Computer Vision service to read from.  
 
-> **Important** - It is recommended to use authentication for this service and prevent unauthorized access to the application.  Without any authentication, anyone can submit and use the Computer Vision service you've deployed, potentially causing increased Azure costs. 
 
 ## Usage
 
