@@ -24,6 +24,9 @@ The Spectacles solution consists of three resources.
 
 The easiest way to install and use Spectacles is to deploy it within your Azure environment by using the supplied ARM template. 
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](
+https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgregorosaurus%2FSpecatcles%2Fmain%2FARMDeployment.json)
+
 After deployment you can set any additional settings or configurations within the web application that you'd like. 
 
 > **Important** - It is recommended to use authentication for this service and prevent unauthorized access to the application.  Without any authentication, anyone can submit and use the Computer Vision service you've deployed, potentially causing increased Azure costs. 
