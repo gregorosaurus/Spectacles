@@ -1,0 +1,137 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appName": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of the spectacles web app resource."
+            }
+        },
+        "storageAccountType": {
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Standard_RAGRS"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Storage Account type"
+            }
+        },
+        "location": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        }
+    },
+    "variables": {
+        "webAppName": "[parameters('appName')]",
+        "hostingPlanName": "[concat(parameters('appName'),'_asp')]",
+        "applicationInsightsName": "[parameters('appName')]",
+        "storageAccountName": "[concat(uniquestring(resourceGroup().id),'azapp')]",
+        "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+        "zipUrl": "https://github.com/gregorosaurus/Spectacles/releases/latest/download/build_release.zip"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2021-04-01",
+            "name": "[variables('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "[parameters('storageAccountType')]"
+            },
+            "kind": "Storage",
+            "properties": {
+                "minimumTlsVersion": "TLS1_2",
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2021-01-15",
+            "name": "[variables('hostingPlanName')]",
+            "location": "[parameters('location')]",
+            "sku": {
+                "name": "D1",
+                "tier": "Shared",
+                "size": "D1",
+                "family": "D",
+                "capacity": 0
+            },
+            "kind": "app"
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2021-01-15",
+            "name": "[variables('webAppName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+            ],
+            "resources": [
+                {
+                    "name": "MSDeploy",
+                    "type": "extensions",
+                    "apiVersion": "2021-01-15",
+                    "dependsOn": [
+                      "[resourceId('Microsoft.Web/Sites', variables('webAppName'))]"
+                    ],
+                    "properties": {
+                        "packageUri": "[variables('zipUrl')]"
+                    },
+                    "condition": "[not(equals(variables('zipUrl'), ''))]"
+                }
+            ],
+            "kind": "app",
+            "properties": {
+                "enabled": true,
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "ComputerVision:Endpoint",
+                            "value": ""
+                        },
+                        {
+                            "name": "ComputerVision:Key",
+                            "value": ""
+                        },
+                        {
+                            "name": "ComputerVision:ModelVersion",
+                            "value": "latest"
+                        },
+                        {
+                            "name": "ConnectionString:StorageAccount",
+                            "value": ""
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

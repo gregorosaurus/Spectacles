@@ -38,7 +38,7 @@ Key | Value
 ComputerVision:Endpoint | This you endpoint of the deployed Computer Vision service in Azure
 ComputerVision:Key | This is your Computer Vision service key
 ComputerVision:ModelVersion | This is the model version of the model that Spectacles will use when calling the Computer Vision service.  This can be left blank, and the model version will be set to ```latest```.  At the time of writing, the other available option is: ```2021-09-30-preview```.
-ConnectionStrings:StorageAccount | This is the storage account used by Spectacles to temporarily upload blobs to for the Computer Vision service to read from.  
+ConnectionStrings:StorageAccount | This is the storage account connection string used by Spectacles to temporarily upload blobs to for the Computer Vision service to read from.  
 
 
 ## Usage
