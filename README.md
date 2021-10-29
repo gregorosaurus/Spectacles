@@ -4,7 +4,7 @@ Spectacles is a [Microsoft Blazor Server](https://dotnet.microsoft.com/apps/aspn
 visualizing the OCR capability of the [Computer Vision](https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/overview) service 
 on Microsoft Azure.
 
-<img src="Images/SpectaclesScreenshot2.png" width="500"/>
+<img src="Images/SpectaclesScreenshot3.png" width="500"/>
 
 ## Introduction
 The Microsoft Azure Cognitive service includes many capabilities, including Computer Vision service. 
