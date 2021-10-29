@@ -30,7 +30,7 @@ jobs:
       - name: Zip Build Files
         uses: papeloto/action-zip@v1
         with:
-          files: Source\bin\Debug\net5.0\
+          files: Source\bin\Debug\net5.0\publish
           dest: build_release.zip
         
       - name: Create Build Artifact
