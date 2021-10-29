@@ -24,8 +24,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         
-      - name: Build Project
-        run: dotnet build Source/Spectacle.sln
+      - name: Build/Publish Project
+        run: dotnet publish Source/Spectacle.sln
         
       - name: Zip Build Files
         uses: papeloto/action-zip@v1
