@@ -25,7 +25,7 @@ The Spectacles solution consists of three resources.
 The easiest way to install and use Spectacles is to deploy it within your Azure environment by using the supplied ARM template. 
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](
-https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgregorosaurus%2FSpecatcles%2Fmain%2FARMDeployment.json)
+https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fgregorosaurus%2FSpectacles%2Fmain%2FARMDeployment.json)
 
 After deployment you can set any additional settings or configurations within the web application that you'd like. 
 
