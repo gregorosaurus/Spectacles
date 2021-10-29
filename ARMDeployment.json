@@ -139,7 +139,7 @@
                             "value": "latest"
                         },
                         {
-                            "name": "ConnectionString:StorageAccount",
+                            "name": "ConnectionStrings:StorageAccount",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), variables('storageAccountApiVersion')).keys[0].value)]"
                         }
                     ]
