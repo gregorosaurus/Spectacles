@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build_release
-          path: Source\bin\Debug\net5.0\
+          path: Source\bin\Debug\net5.0\publish
 
       - name: Create Release
         id: create_release
