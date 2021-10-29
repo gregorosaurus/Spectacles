@@ -26,6 +26,18 @@
             "metadata": {
                 "description": "Location for all resources."
             }
+        },
+        "ComputerVisionEndpoint": {
+            "type": "String",
+            "metadata": {
+                "description": "The endpoint for the computer vision service you've deployed"
+            }
+        },
+        "ComputerVisionKey": {
+            "type": "String",
+            "metadata": {
+                "description": "The key for the computer vision service you've deployed"
+            }
         }
     },
     "variables": {
@@ -34,7 +46,8 @@
         "applicationInsightsName": "[parameters('appName')]",
         "storageAccountName": "[concat(uniquestring(resourceGroup().id),'azapp')]",
         "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-        "zipUrl": "https://github.com/gregorosaurus/Spectacles/releases/latest/download/build_release.zip"
+        "zipUrl": "https://github.com/gregorosaurus/Spectacles/releases/latest/download/build_release.zip",
+        "storageAccountApiVersion": "2021-04-01"
     },
     "resources": [
         {
@@ -115,11 +128,11 @@
                     "appSettings": [
                         {
                             "name": "ComputerVision:Endpoint",
-                            "value": ""
+                            "value": "[parameters('ComputerVisionEndpoint')]"
                         },
                         {
                             "name": "ComputerVision:Key",
-                            "value": ""
+                            "value": "[parameters('ComputerVisionKey')]"
                         },
                         {
                             "name": "ComputerVision:ModelVersion",
@@ -127,11 +140,22 @@
                         },
                         {
                             "name": "ConnectionString:StorageAccount",
-                            "value": ""
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), variables('storageAccountApiVersion')).keys[0].value)]"
                         }
                     ]
                 }
             }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2021-02-01",
+            "name": "[concat(variables('webAppName'), '/web')]",
+            "properties": {
+                "netFrameworkVersion": "v5.0"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/site', variables('webAppName'))]"
+            ]
         }
     ]
 }
