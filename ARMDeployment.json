@@ -154,7 +154,7 @@
                 "netFrameworkVersion": "v5.0"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Web/site', variables('webAppName'))]"
+                "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
             ]
         }
     ]
